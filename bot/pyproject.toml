@@ -1,0 +1,27 @@
+[project]
+name = "recall-bot"
+version = "1.0.0"
+description = "Recall Telegram Bot - Save links via Telegram"
+# readme = "README.md"  # Uncomment when README exists
+requires-python = ">=3.11"
+dependencies = [
+    "python-telegram-bot>=21.0",
+    "httpx>=0.26.0",
+]
+
+[project.optional-dependencies]
+test = [
+    "pytest>=8.0.0",
+    "pytest-asyncio>=0.23.4",
+    "pytest-cov>=4.1.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+filterwarnings = ["ignore::DeprecationWarning"]
+addopts = "-v --tb=short"
