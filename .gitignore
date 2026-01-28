@@ -1,0 +1,73 @@
+# IDE and editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Planning and AI
+.planning/
+.claude/
+
+# Dependencies
+node_modules/
+__pycache__/
+*.pyc
+.venv/
+venv/
+env/
+.eggs/
+*.egg-info/
+
+# Build outputs
+dist/
+build/
+*.egg
+.next/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Test coverage
+coverage/
+htmlcov/
+.coverage
+.pytest_cache/
+.nyc_output/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Docker
+*.pid
+
+# Database
+*.db
+*.sqlite3
+pgdata/
+
+# Temporary files
+*.tmp
+*.temp
+.cache/
+
+# Python
+*.pyo
+.mypy_cache/
+.ruff_cache/
+
+# Frontend specific
+frontend/.vite/
+
+# Backend specific
+backend/.pytest_cache/
+
+# Extension build
+extension/*.zip
