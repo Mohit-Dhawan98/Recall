@@ -5,8 +5,7 @@
 *.swo
 *~
 
-# Planning and AI
-.planning/
+# AI assistant
 .claude/
 
 # Dependencies
