@@ -75,7 +75,7 @@ async def process_article_background(article_id: UUID, content: str):
             await db.commit()
 
             # Generate embedding
-            embedding_text = f"{title}\n\n{analysis.summary}"
+            embedding_text = f"{article.title}\n\n{analysis.summary}"
             embedding_vector = await generate_embedding(embedding_text)
 
             if embedding_vector:
