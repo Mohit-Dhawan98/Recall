@@ -43,6 +43,29 @@ class TestExtractorBase:
         hash2 = hash_url("https://example.com/article2")
         assert hash1 != hash2
 
+    def test_hash_url_same_for_different_param_order(self):
+        """[BASE] Same URL with different param order should produce same hash."""
+        url1 = "https://example.com/page?a=1&b=2"
+        url2 = "https://example.com/page?b=2&a=1"
+        assert hash_url(url1) == hash_url(url2)
+
+    def test_hash_url_same_with_tracking_params(self):
+        """[BASE] URLs differing only by tracking params should have same hash."""
+        url1 = "https://example.com/page?id=123"
+        url2 = "https://example.com/page?id=123&utm_source=twitter"
+        assert hash_url(url1) == hash_url(url2)
+
+    def test_hash_url_same_trailing_slash(self):
+        """[BASE] URLs differing only by trailing slash should have same hash."""
+        url1 = "https://example.com/page"
+        url2 = "https://example.com/page/"
+        assert hash_url(url1) == hash_url(url2)
+
+    def test_hash_url_length(self):
+        """[BASE] Hash should be 16 characters (truncated SHA256)."""
+        url = "https://example.com/page"
+        assert len(hash_url(url)) == 16
+
 
 # ═══════════════════════════════════════════════════════════════
 # NORMAL CASES - URL normalization
@@ -50,6 +73,42 @@ class TestExtractorBase:
 
 class TestUrlNormalization:
     """Normal case tests for URL normalization."""
+
+    def test_sorts_query_params_alphabetically(self):
+        """[NORMAL] Query parameters should be sorted by key."""
+        url = "https://example.com/page?b=2&a=1"
+        result = normalize_url(url)
+        assert result == "https://example.com/page?a=1&b=2"
+
+    def test_already_sorted_params_unchanged(self):
+        """[NORMAL] Already sorted params should remain unchanged."""
+        url = "https://example.com/page?a=1&b=2"
+        result = normalize_url(url)
+        assert result == "https://example.com/page?a=1&b=2"
+
+    def test_multiple_params_sorted(self):
+        """[NORMAL] Multiple params should be sorted alphabetically."""
+        url = "https://example.com/page?z=1&a=2&m=3"
+        result = normalize_url(url)
+        assert result == "https://example.com/page?a=2&m=3&z=1"
+
+    def test_duplicate_keys_preserved_and_sorted(self):
+        """[NORMAL] Duplicate keys should be preserved and sorted by value."""
+        url = "https://example.com/page?a=2&a=1"
+        result = normalize_url(url)
+        assert result == "https://example.com/page?a=1&a=2"
+
+    def test_preserves_scheme_and_netloc(self):
+        """[NORMAL] Scheme (https) and netloc (domain) should be preserved."""
+        url = "https://sub.example.com:8080/page?b=1&a=2"
+        result = normalize_url(url)
+        assert result == "https://sub.example.com:8080/page?a=2&b=1"
+
+    def test_complex_url_normalization(self):
+        """[NORMAL] Complex URL with all edge cases."""
+        url = "https://example.com/article/?utm_source=twitter&id=123&ref=fb&sort=date#comments"
+        result = normalize_url(url)
+        assert result == "https://example.com/article?id=123&sort=date"
 
     def test_remove_utm_parameters(self):
         """[NORMAL] Remove UTM tracking parameters."""
