@@ -10,28 +10,28 @@ See: .planning/PROJECT.md (updated 2026-01-29)
 ## Current Position
 
 Phase: 1 of 6 (Critical Fixes & Test Infrastructure)
-Plan: 1 of TBD in current phase
+Plan: 2 of TBD in current phase
 Status: In progress
-Last activity: 2026-01-29 — Completed 01-01-PLAN.md
+Last activity: 2026-01-29 — Completed 01-02-PLAN.md
 
-Progress: [█░░░░░░░░░] ~10%
+Progress: [██░░░░░░░░] ~20%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 1
-- Average duration: 2 min
-- Total execution time: 0.03 hours
+- Total plans completed: 2
+- Average duration: 2.5 min
+- Total execution time: 0.08 hours
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
-| 1 | 1 | 2min | 2min |
+| 1 | 2 | 5min | 2.5min |
 
 **Recent Trend:**
-- Last 5 plans: 01-01 (2min)
-- Trend: Just started
+- Last 5 plans: 01-01 (2min), 01-02 (3min)
+- Trend: Consistent velocity (~2-3min/plan)
 
 *Updated after each plan completion*
 
@@ -48,6 +48,9 @@ Recent decisions affecting current work:
 - 01-01: Background tasks fetch article data from database instead of passing ORM objects
 - 01-01: LLM logging uses standardized 'LLM analysis:' prefix for easy filtering
 - 01-01: Pass only article_id and content to background task (content as primitive string)
+- 01-02: Use parse_qsl instead of manual string splitting for proper query parameter parsing
+- 01-02: Use urlencode with quote_via=quote to preserve %20 encoding instead of +
+- 01-02: Extract TRACKING_PARAMS to module level for maintainability
 
 ### Pending Todos
 
@@ -58,6 +61,7 @@ None yet.
 **Phase 1 considerations:**
 - ✅ Background task connection pooling fixed (01-01)
 - ✅ LLM fallback chain logging added (01-01)
+- ✅ URL normalization with sorted query parameters fixed (01-02)
 - Connection pooling changes require integration testing to validate under load
 
 **Phase 4-5 considerations:**
@@ -66,6 +70,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-01-29 11:19 UTC
-Stopped at: Completed 01-01-PLAN.md (Backend connection pooling and LLM logging)
+Last session: 2026-01-29 11:20 UTC
+Stopped at: Completed 01-02-PLAN.md (URL normalization with sorted query parameters)
 Resume file: None
