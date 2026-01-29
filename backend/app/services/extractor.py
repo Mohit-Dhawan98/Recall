@@ -2,7 +2,7 @@ import httpx
 from bs4 import BeautifulSoup
 from readability import Document
 import trafilatura
-from urllib.parse import urlparse
+from urllib.parse import urlparse, parse_qsl, urlencode, urlunparse, quote
 import hashlib
 import re
 from typing import Optional, Tuple
@@ -24,27 +24,48 @@ class ExtractedContent:
 
 
 def normalize_url(url: str) -> str:
-    """Normalize URL for deduplication."""
+    """Normalize URL for deduplication.
+
+    - Removes tracking parameters (utm_*, fbclid, gclid, etc.)
+    - Sorts query parameters alphabetically for consistent ordering
+    - Removes trailing slashes from path
+    - Removes URL fragments (#section)
+    """
     parsed = urlparse(url)
 
-    # Remove tracking parameters
-    tracking_params = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content',
-                       'ref', 'fbclid', 'gclid', 'source', 'mc_cid', 'mc_eid']
+    # Tracking parameters to remove
+    tracking_params = {
+        'utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content',
+        'ref', 'fbclid', 'gclid', 'source', 'mc_cid', 'mc_eid'
+    }
 
     if parsed.query:
-        params = parsed.query.split('&')
-        filtered_params = [p for p in params if p.split('=')[0] not in tracking_params]
-        query = '&'.join(filtered_params)
+        # Parse query string to list of (key, value) tuples
+        params = parse_qsl(parsed.query)
+
+        # Filter out tracking parameters
+        filtered_params = [
+            (k, v) for k, v in params
+            if k not in tracking_params
+        ]
+
+        # Sort by key, then by value for consistent ordering
+        sorted_params = sorted(filtered_params)
+
+        # Rebuild query string (using quote to preserve %20 instead of +)
+        query = urlencode(sorted_params, quote_via=quote)
     else:
         query = ''
 
-    # Reconstruct URL without fragment
-    normalized = f"{parsed.scheme}://{parsed.netloc}{parsed.path}"
-    if query:
-        normalized += f"?{query}"
-
-    # Remove trailing slash
-    normalized = normalized.rstrip('/')
+    # Reconstruct URL without fragment, with trailing slash removed
+    normalized = urlunparse((
+        parsed.scheme,
+        parsed.netloc,
+        parsed.path.rstrip('/'),  # Remove trailing slash
+        parsed.params,            # URL params (rarely used, e.g., ;type=a)
+        query,                    # Sorted query string
+        ''                        # No fragment
+    ))
 
     return normalized
 
