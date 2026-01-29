@@ -5,7 +5,7 @@ from sqlalchemy.orm import selectinload
 from typing import Optional, List
 from uuid import UUID
 
-from app.database import get_db
+from app.database import get_db, AsyncSessionLocal
 from app.models import Article, Tag, Entity, Embedding, User
 from app.schemas import (
     ArticleCaptureRequest, ArticleResponse, ArticleListResponse,
@@ -19,22 +19,14 @@ from app.routers.auth import get_current_user
 router = APIRouter(prefix="/api/articles", tags=["articles"])
 
 
-async def process_article_background(
-    article_id: UUID,
-    content: str,
-    title: str,
-    source_domain: str,
-    user_id: UUID,
-    db_url: str
-):
-    """Background task to process article with LLM."""
-    from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
-    from sqlalchemy.orm import sessionmaker
+async def process_article_background(article_id: UUID, content: str):
+    """Background task to process article with LLM.
 
-    engine = create_async_engine(db_url)
-    async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
-
-    async with async_session() as db:
+    Args:
+        article_id: UUID of the article to process
+        content: Extracted article content (passed as primitive string, not ORM object)
+    """
+    async with AsyncSessionLocal() as db:
         try:
             # Fetch article
             stmt = (
@@ -53,7 +45,7 @@ async def process_article_background(
                 return
 
             # Analyze content
-            analysis = await analyze_content(title, content, source_domain)
+            analysis = await analyze_content(article.title, content, article.source_domain)
 
             # Update article
             article.summary = analysis.summary
@@ -99,9 +91,9 @@ async def process_article_background(
             await db.refresh(article)
 
             # Build relations
-            relations = await build_relations_for_article(db, article, user_id)
+            relations = await build_relations_for_article(db, article, article.user_id)
             if relations:
-                await save_relations(db, relations, user_id)
+                await save_relations(db, relations, article.user_id)
 
         except Exception as e:
             # Mark as failed
@@ -109,8 +101,6 @@ async def process_article_background(
                 article.processing_status = "failed"
                 await db.commit()
             raise e
-        finally:
-            await engine.dispose()
 
 
 @router.post("", response_model=CaptureResponse)
@@ -164,16 +154,7 @@ async def capture_article(
     await db.refresh(article)
 
     # Process in background
-    db_url = settings.database_url.replace("postgresql://", "postgresql+asyncpg://")
-    background_tasks.add_task(
-        process_article_background,
-        article.id,
-        extracted.content,
-        article.title,
-        article.source_domain,
-        current_user.id,
-        db_url
-    )
+    background_tasks.add_task(process_article_background, article.id, extracted.content)
 
     return CaptureResponse(
         id=article.id,
