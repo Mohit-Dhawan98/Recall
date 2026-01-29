@@ -9,6 +9,13 @@ from typing import Optional, Tuple
 from dataclasses import dataclass
 
 
+# Tracking parameters to remove during URL normalization
+TRACKING_PARAMS = {
+    'utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content',
+    'ref', 'fbclid', 'gclid', 'source', 'mc_cid', 'mc_eid'
+}
+
+
 @dataclass
 class ExtractedContent:
     url: str
@@ -33,12 +40,6 @@ def normalize_url(url: str) -> str:
     """
     parsed = urlparse(url)
 
-    # Tracking parameters to remove
-    tracking_params = {
-        'utm_source', 'utm_medium', 'utm_campaign', 'utm_term', 'utm_content',
-        'ref', 'fbclid', 'gclid', 'source', 'mc_cid', 'mc_eid'
-    }
-
     if parsed.query:
         # Parse query string to list of (key, value) tuples
         params = parse_qsl(parsed.query)
@@ -46,7 +47,7 @@ def normalize_url(url: str) -> str:
         # Filter out tracking parameters
         filtered_params = [
             (k, v) for k, v in params
-            if k not in tracking_params
+            if k not in TRACKING_PARAMS
         ]
 
         # Sort by key, then by value for consistent ordering
