@@ -30,10 +30,12 @@ Decimal phases appear between their surrounding integers in numeric order.
   2. Telegram bot rejects messages from unauthorized user IDs with error message
   3. LLM service logs show which fallback path was used (DeepSeek/Ollama/rule-based) for each article
   4. URLs with different query param ordering hash to the same article (no duplicates)
-**Plans**: TBD
+**Plans**: 3 plans
 
 Plans:
-- [ ] TBD
+- [ ] 01-01-PLAN.md — Fix connection pooling and add LLM fallback logging
+- [ ] 01-02-PLAN.md — URL normalization with sorted query parameters (TDD)
+- [ ] 01-03-PLAN.md — Telegram bot owner-only authorization
 
 ### Phase 2: Extension Verification & Frontend Tests
 **Goal**: Extension manually verified working in Chrome, frontend has tests for core components with React Query integration
@@ -114,7 +116,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Critical Fixes & Test Infrastructure | 0/0 | Not started | - |
+| 1. Critical Fixes & Test Infrastructure | 0/3 | Ready | - |
 | 2. Extension Verification & Frontend Tests | 0/0 | Not started | - |
 | 3. Backend & Bot Testing | 0/0 | Not started | - |
 | 4. Auto-Capture Foundation | 0/0 | Not started | - |
