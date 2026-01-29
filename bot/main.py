@@ -15,6 +15,7 @@ logger = logging.getLogger(__name__)
 
 # Configuration
 TELEGRAM_BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN')
+TELEGRAM_OWNER_USER_ID = os.getenv('TELEGRAM_OWNER_USER_ID')
 API_URL = os.getenv('API_URL', 'http://api:8000')
 WEBHOOK_URL = os.getenv('WEBHOOK_URL')
 USE_POLLING = os.getenv('USE_POLLING', 'true').lower() == 'true'
@@ -121,6 +122,14 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
     await message.reply_text(response_text)
 
 
+async def handle_unauthorized(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """Handle messages from unauthorized users."""
+    logger.warning(f"Unauthorized access attempt from user {update.message.from_user.id}")
+    await update.message.reply_text(
+        "Sorry, this bot is private. Only the owner can use it."
+    )
+
+
 async def error_handler(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Handle errors."""
     logger.error(f"Update {update} caused error {context.error}")
@@ -137,16 +146,38 @@ def main() -> None:
         logger.error("TELEGRAM_BOT_TOKEN not set!")
         return
 
+    if not TELEGRAM_OWNER_USER_ID:
+        logger.error("TELEGRAM_OWNER_USER_ID not set! Bot requires owner user ID for authorization.")
+        return
+
+    # Convert to int for filters.User
+    try:
+        owner_user_id = int(TELEGRAM_OWNER_USER_ID)
+    except ValueError:
+        logger.error(f"TELEGRAM_OWNER_USER_ID must be a valid integer, got: {TELEGRAM_OWNER_USER_ID}")
+        return
+
     # Create application
     application = Application.builder().token(TELEGRAM_BOT_TOKEN).build()
 
-    # Add handlers
-    application.add_handler(CommandHandler("start", start))
-    application.add_handler(CommandHandler("help", help_command))
-    application.add_handler(CommandHandler("status", status_command))
+    # Owner filter for all handlers
+    owner_filter = filters.User(user_id=owner_user_id)
+
+    # Command handlers - only for owner
+    application.add_handler(CommandHandler("start", start, filters=owner_filter))
+    application.add_handler(CommandHandler("help", help_command, filters=owner_filter))
+    application.add_handler(CommandHandler("status", status_command, filters=owner_filter))
+
+    # Message handler - only for owner
+    application.add_handler(MessageHandler(
+        filters.TEXT & owner_filter & ~filters.COMMAND,
+        handle_message
+    ))
+
+    # Catch-all for unauthorized users (must be last)
     application.add_handler(MessageHandler(
         filters.TEXT & ~filters.COMMAND,
-        handle_message
+        handle_unauthorized
     ))
 
     # Add error handler
