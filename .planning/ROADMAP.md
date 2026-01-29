@@ -12,7 +12,7 @@ This milestone stabilizes the existing MVP by fixing critical bugs in backend co
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Critical Fixes & Test Infrastructure** - Fix blocking bugs and set up test patterns
+- [x] **Phase 1: Critical Fixes & Test Infrastructure** - Fix blocking bugs and set up test patterns
 - [ ] **Phase 2: Extension Verification & Frontend Tests** - Manual extension testing and React component tests
 - [ ] **Phase 3: Backend & Bot Testing** - Integration tests for capture flow and bot authorization
 - [ ] **Phase 4: Auto-Capture Foundation** - Domain whitelist and article detection
@@ -33,9 +33,9 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Plans**: 3 plans
 
 Plans:
-- [ ] 01-01-PLAN.md — Fix connection pooling and add LLM fallback logging
-- [ ] 01-02-PLAN.md — URL normalization with sorted query parameters (TDD)
-- [ ] 01-03-PLAN.md — Telegram bot owner-only authorization
+- [x] 01-01-PLAN.md — Fix connection pooling and add LLM fallback logging
+- [x] 01-02-PLAN.md — URL normalization with sorted query parameters (TDD)
+- [x] 01-03-PLAN.md — Telegram bot owner-only authorization
 
 ### Phase 2: Extension Verification & Frontend Tests
 **Goal**: Extension manually verified working in Chrome, frontend has tests for core components with React Query integration
@@ -116,7 +116,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Critical Fixes & Test Infrastructure | 0/3 | Ready | - |
+| 1. Critical Fixes & Test Infrastructure | 3/3 | ✓ Complete | 2026-01-29 |
 | 2. Extension Verification & Frontend Tests | 0/0 | Not started | - |
 | 3. Backend & Bot Testing | 0/0 | Not started | - |
 | 4. Auto-Capture Foundation | 0/0 | Not started | - |

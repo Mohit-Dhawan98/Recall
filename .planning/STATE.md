@@ -5,33 +5,33 @@
 See: .planning/PROJECT.md (updated 2026-01-29)
 
 **Core value:** Effortlessly capture articles I read and resurface them when relevant.
-**Current focus:** Phase 1 - Critical Fixes & Test Infrastructure
+**Current focus:** Phase 2 - Extension Verification & Frontend Tests
 
 ## Current Position
 
-Phase: 1 of 6 (Critical Fixes & Test Infrastructure)
-Plan: 2 of TBD in current phase
-Status: In progress
-Last activity: 2026-01-29 — Completed 01-02-PLAN.md
+Phase: 2 of 6 (Extension Verification & Frontend Tests)
+Plan: 0 of TBD in current phase
+Status: Ready to plan
+Last activity: 2026-01-29 — Phase 1 complete
 
-Progress: [██░░░░░░░░] ~20%
+Progress: [██░░░░░░░░] 17%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 2
-- Average duration: 2.5 min
-- Total execution time: 0.08 hours
+- Total plans completed: 3
+- Average duration: 2 min
+- Total execution time: 0.1 hours
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
-| 1 | 2 | 5min | 2.5min |
+| 1 | 3 | 6min | 2min |
 
 **Recent Trend:**
-- Last 5 plans: 01-01 (2min), 01-02 (3min)
-- Trend: Consistent velocity (~2-3min/plan)
+- Last 5 plans: 01-01 (2min), 01-02 (3min), 01-03 (1min)
+- Trend: Consistent velocity (~2min/plan)
 
 *Updated after each plan completion*
 
@@ -51,6 +51,8 @@ Recent decisions affecting current work:
 - 01-02: Use parse_qsl instead of manual string splitting for proper query parameter parsing
 - 01-02: Use urlencode with quote_via=quote to preserve %20 encoding instead of +
 - 01-02: Extract TRACKING_PARAMS to module level for maintainability
+- 01-03: Use filters.User for Telegram bot authorization (cleaner than manual checks)
+- 01-03: Bot requires TELEGRAM_OWNER_USER_ID env var (fails fast with clear error)
 
 ### Pending Todos
 
@@ -58,11 +60,12 @@ None yet.
 
 ### Blockers/Concerns
 
-**Phase 1 considerations:**
+**Phase 1 completed:**
 - ✅ Background task connection pooling fixed (01-01)
 - ✅ LLM fallback chain logging added (01-01)
 - ✅ URL normalization with sorted query parameters fixed (01-02)
-- Connection pooling changes require integration testing to validate under load
+- ✅ Telegram bot owner-only authorization added (01-03)
+- ✅ Bug fix: article.title variable (commit 45ba498)
 
 **Phase 4-5 considerations:**
 - Chrome MV3 service worker lifecycle requires careful state persistence architecture
@@ -70,6 +73,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-01-29 11:20 UTC
-Stopped at: Completed 01-02-PLAN.md (URL normalization with sorted query parameters)
+Last session: 2026-01-29 (Phase 1 execution)
+Stopped at: Phase 1 complete, ready for Phase 2 planning
 Resume file: None
