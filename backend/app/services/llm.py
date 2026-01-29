@@ -1,10 +1,58 @@
 import httpx
 import json
+import logging
 from typing import Optional, List, Dict, Any
-from dataclasses import dataclass
+from dataclasses import dataclass, field
+from datetime import datetime
 from app.config import get_settings
 
 settings = get_settings()
+logger = logging.getLogger(__name__)
+
+# DeepSeek pricing (per 1M tokens) - as of 2024
+DEEPSEEK_PRICING = {
+    "input": 0.14,   # $0.14 per 1M input tokens
+    "output": 0.28,  # $0.28 per 1M output tokens
+}
+
+# In-memory usage tracking (persisted via API calls)
+_usage_stats = {
+    "total_input_tokens": 0,
+    "total_output_tokens": 0,
+    "total_cost_usd": 0.0,
+    "api_calls": 0,
+    "last_reset": datetime.utcnow().isoformat(),
+}
+
+
+def get_usage_stats() -> Dict[str, Any]:
+    """Get current usage statistics."""
+    return _usage_stats.copy()
+
+
+def reset_usage_stats():
+    """Reset usage statistics."""
+    global _usage_stats
+    _usage_stats = {
+        "total_input_tokens": 0,
+        "total_output_tokens": 0,
+        "total_cost_usd": 0.0,
+        "api_calls": 0,
+        "last_reset": datetime.utcnow().isoformat(),
+    }
+
+
+def _track_usage(input_tokens: int, output_tokens: int):
+    """Track token usage and calculate cost."""
+    cost = (input_tokens / 1_000_000 * DEEPSEEK_PRICING["input"] +
+            output_tokens / 1_000_000 * DEEPSEEK_PRICING["output"])
+
+    _usage_stats["total_input_tokens"] += input_tokens
+    _usage_stats["total_output_tokens"] += output_tokens
+    _usage_stats["total_cost_usd"] += cost
+    _usage_stats["api_calls"] += 1
+
+    logger.info(f"DeepSeek API call: {input_tokens} in, {output_tokens} out, ${cost:.6f}")
 
 
 @dataclass
@@ -72,27 +120,39 @@ Respond ONLY with valid JSON, no other text."""
 
 
 async def call_deepseek(prompt: str) -> Optional[str]:
-    """Call DeepSeek API."""
+    """Call DeepSeek API and track usage."""
     if not settings.deepseek_api_key:
         return None
 
-    async with httpx.AsyncClient(timeout=60.0) as client:
-        response = await client.post(
-            "https://api.deepseek.com/v1/chat/completions",
-            headers={
-                "Authorization": f"Bearer {settings.deepseek_api_key}",
-                "Content-Type": "application/json"
-            },
-            json={
-                "model": "deepseek-chat",
-                "messages": [{"role": "user", "content": prompt}],
-                "temperature": 0.3,
-                "max_tokens": 2000
-            }
-        )
-        response.raise_for_status()
-        data = response.json()
-        return data["choices"][0]["message"]["content"]
+    try:
+        async with httpx.AsyncClient(timeout=60.0) as client:
+            response = await client.post(
+                "https://api.deepseek.com/v1/chat/completions",
+                headers={
+                    "Authorization": f"Bearer {settings.deepseek_api_key}",
+                    "Content-Type": "application/json"
+                },
+                json={
+                    "model": "deepseek-chat",
+                    "messages": [{"role": "user", "content": prompt}],
+                    "temperature": 0.3,
+                    "max_tokens": 2000
+                }
+            )
+            response.raise_for_status()
+            data = response.json()
+
+            # Track usage if available
+            if "usage" in data:
+                _track_usage(
+                    data["usage"].get("prompt_tokens", 0),
+                    data["usage"].get("completion_tokens", 0)
+                )
+
+            return data["choices"][0]["message"]["content"]
+    except Exception as e:
+        logger.error(f"DeepSeek API error: {e}")
+        return None
 
 
 async def call_ollama(prompt: str, model: str = "llama3.2") -> Optional[str]:
@@ -207,30 +267,53 @@ async def analyze_content(title: str, content: str, source_domain: str) -> Analy
     )
 
     # Try DeepSeek first
+    logger.info(f"LLM analysis: attempting DeepSeek for '{title[:50]}...'")
     response = await call_deepseek(prompt)
 
-    # Fallback to Ollama
-    if not response:
-        response = await call_ollama(prompt)
-
-    # Parse response
     if response:
+        logger.info("LLM analysis: DeepSeek succeeded")
         parsed = parse_llm_response(response)
         if parsed:
             tags = parsed.get("tags", [])
-            # Add special tags
             for special in parsed.get("special_tags", []):
                 if special in SPECIAL_TAGS:
                     tags.append({"domain": special, "topic": None})
-
             return AnalysisResult(
                 summary=parsed.get("summary", ""),
                 key_quotes=parsed.get("key_quotes", []),
                 tags=tags,
                 entities=parsed.get("entities", [])
             )
+        else:
+            logger.warning("LLM analysis: DeepSeek returned unparseable response, trying Ollama")
+    else:
+        logger.warning("LLM analysis: DeepSeek failed or unavailable, trying Ollama")
+
+    # Fallback to Ollama
+    logger.info("LLM analysis: attempting Ollama fallback")
+    response = await call_ollama(prompt)
+
+    if response:
+        logger.info("LLM analysis: Ollama succeeded")
+        parsed = parse_llm_response(response)
+        if parsed:
+            tags = parsed.get("tags", [])
+            for special in parsed.get("special_tags", []):
+                if special in SPECIAL_TAGS:
+                    tags.append({"domain": special, "topic": None})
+            return AnalysisResult(
+                summary=parsed.get("summary", ""),
+                key_quotes=parsed.get("key_quotes", []),
+                tags=tags,
+                entities=parsed.get("entities", [])
+            )
+        else:
+            logger.warning("LLM analysis: Ollama returned unparseable response, using rule-based")
+    else:
+        logger.warning("LLM analysis: Ollama failed or unavailable, using rule-based")
 
     # Fallback to rule-based
+    logger.info("LLM analysis: using rule-based fallback")
     return rule_based_analysis(title, content, source_domain)
 
 
