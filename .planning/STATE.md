@@ -10,27 +10,28 @@ See: .planning/PROJECT.md (updated 2026-01-29)
 ## Current Position
 
 Phase: 2 of 6 (Extension Verification & Frontend Tests)
-Plan: 0 of 4 in current phase
-Status: Ready to execute
-Last activity: 2026-01-30 — Phase 2 planned (4 plans)
+Plan: 1 of 4 in current phase
+Status: In progress
+Last activity: 2026-01-30 — Completed 02-01-PLAN.md
 
-Progress: [██░░░░░░░░] 17%
+Progress: [██░░░░░░░░] 22%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 3
+- Total plans completed: 4
 - Average duration: 2 min
-- Total execution time: 0.1 hours
+- Total execution time: 0.2 hours
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 1 | 3 | 6min | 2min |
+| 2 | 1 | 2min | 2min |
 
 **Recent Trend:**
-- Last 5 plans: 01-01 (2min), 01-02 (3min), 01-03 (1min)
+- Last 5 plans: 01-01 (2min), 01-02 (3min), 01-03 (1min), 02-01 (2min)
 - Trend: Consistent velocity (~2min/plan)
 
 *Updated after each plan completion*
@@ -53,6 +54,9 @@ Recent decisions affecting current work:
 - 01-02: Extract TRACKING_PARAMS to module level for maintainability
 - 01-03: Use filters.User for Telegram bot authorization (cleaner than manual checks)
 - 01-03: Bot requires TELEGRAM_OWNER_USER_ID env var (fails fast with clear error)
+- 02-01: Use ReactNode for Wrapper children type (RTL render wrapper requires ReactNode)
+- 02-01: gcTime: Infinity for test QueryClient to prevent GC during assertions
+- 02-01: MSW v2 syntax (http/HttpResponse) matching msw ^2.1.5
 
 ### Pending Todos
 
@@ -73,6 +77,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-01-29 (Phase 1 execution)
-Stopped at: Phase 1 complete, ready for Phase 2 planning
+Last session: 2026-01-30 (Phase 2 execution)
+Stopped at: Completed 02-01-PLAN.md (Test Infrastructure Setup)
 Resume file: None
