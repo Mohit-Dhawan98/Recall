@@ -1,4 +1,4 @@
-import { ReactElement } from 'react'
+import { ReactElement, ReactNode } from 'react'
 import { render, RenderOptions } from '@testing-library/react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { MemoryRouter, Routes, Route } from 'react-router-dom'
@@ -30,7 +30,7 @@ export function renderWithProviders(
   const { initialEntries = ['/'], path = '*', ...renderOptions } = options
   const queryClient = createTestQueryClient()
 
-  function Wrapper({ children }: { children: ReactElement }) {
+  function Wrapper({ children }: { children: ReactNode }) {
     return (
       <QueryClientProvider client={queryClient}>
         <MemoryRouter initialEntries={initialEntries}>
