@@ -47,10 +47,13 @@ Plans:
   3. ArticleCard displays title, summary, tags, and handles click navigation
   4. Search page submits query and displays results with proper error handling
   5. Graph page loads and renders article connections without crashing
-**Plans**: TBD
+**Plans**: 4 plans
 
 Plans:
-- [ ] TBD
+- [ ] 02-01-PLAN.md — Test infrastructure setup (vitest config, test utils, fixtures, MSW handlers)
+- [ ] 02-02-PLAN.md — Component and page tests (ArticleCard, Timeline, Search, Graph)
+- [ ] 02-03-PLAN.md — Extension verification checklist & CI pipeline
+- [ ] 02-04-PLAN.md — ArticleDetail page tests
 
 ### Phase 3: Backend & Bot Testing
 **Goal**: Backend has integration tests for full capture pipeline, bot has unit tests for message handling and authorization
@@ -117,7 +120,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Critical Fixes & Test Infrastructure | 3/3 | ✓ Complete | 2026-01-29 |
-| 2. Extension Verification & Frontend Tests | 0/0 | Not started | - |
+| 2. Extension Verification & Frontend Tests | 0/4 | Planning complete | - |
 | 3. Backend & Bot Testing | 0/0 | Not started | - |
 | 4. Auto-Capture Foundation | 0/0 | Not started | - |
 | 5. Dwell Time Tracking | 0/0 | Not started | - |
