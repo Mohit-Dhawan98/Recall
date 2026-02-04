@@ -64,10 +64,11 @@ Plans:
   2. Bot test suite verifies URL extraction from messages, authorization checks, and API submission
   3. Background task failure scenarios are tested and articles marked as "failed" with retry logic
   4. Extension E2E test (if implemented) validates manual capture flow in real Chrome environment
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] TBD
+- [ ] 03-01-PLAN.md — Backend integration tests for capture pipeline and failure scenarios
+- [ ] 03-02-PLAN.md — Bot unit tests for URL extraction, message handling, and authorization
 
 ### Phase 4: Auto-Capture Foundation
 **Goal**: Users can manage domain whitelist in extension options and extension detects article pages using Readability heuristics
