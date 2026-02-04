@@ -122,7 +122,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 |-------|----------------|--------|-----------|
 | 1. Critical Fixes & Test Infrastructure | 3/3 | ✓ Complete | 2026-01-29 |
 | 2. Extension Verification & Frontend Tests | 4/4 | ✓ Complete | 2026-01-30 |
-| 3. Backend & Bot Testing | 0/0 | Not started | - |
+| 3. Backend & Bot Testing | 0/2 | Planning complete | - |
 | 4. Auto-Capture Foundation | 0/0 | Not started | - |
 | 5. Dwell Time Tracking | 0/0 | Not started | - |
 | 6. Auto-Capture Integration & Polish | 0/0 | Not started | - |
