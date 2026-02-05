@@ -10,18 +10,18 @@ See: .planning/PROJECT.md (updated 2026-01-29)
 ## Current Position
 
 Phase: 3 of 6 (Backend & Bot Testing)
-Plan: 2 of 2 in current phase
-Status: In progress — plan 03-02 complete
-Last activity: 2026-02-05 — Completed 03-02-PLAN.md (Bot unit tests)
+Plan: 1 of 2 in current phase
+Status: In progress — plan 03-01 complete
+Last activity: 2026-02-05 — Completed 03-01-PLAN.md (Backend integration tests)
 
-Progress: [████████░░] 78%
+Progress: [████████░░] 80%
 
 ## Performance Metrics
 
 **Velocity:**
 - Total plans completed: 8
-- Average duration: 2 min
-- Total execution time: 0.3 hours
+- Average duration: 3 min
+- Total execution time: 0.4 hours
 
 **By Phase:**
 
@@ -29,11 +29,11 @@ Progress: [████████░░] 78%
 |-------|-------|-------|----------|
 | 1 | 3 | 6min | 2min |
 | 2 | 4 | 8min | 2min |
-| 3 | 1 | 2min | 2min |
+| 3 | 1 | 9min | 9min |
 
 **Recent Trend:**
-- Last 5 plans: 02-01 (2min), 02-02 (2min), 02-03 (2min), 02-04 (2min), 03-02 (2min)
-- Trend: Consistent velocity (~2min/plan)
+- Last 5 plans: 02-02 (2min), 02-03 (2min), 02-04 (2min), 03-01 (9min)
+- Trend: Integration tests took longer due to testcontainers complexity
 
 *Updated after each plan completion*
 
@@ -61,9 +61,9 @@ Recent decisions affecting current work:
 - 02-02: Use getByRole for elements with duplicate text content (Search heading vs button)
 - 02-02: vi.mock react-force-graph-2d before import for canvas-dependent components
 - 02-04: Use querySelector for CSS class-based elements (spinner, card sections)
-- 03-02: Mock save_article function instead of httpx client directly for cleaner test boundaries
-- 03-02: Create bot/__init__.py to make bot directory a proper Python package
-- 03-02: Use autouse fixture for env vars to ensure all tests have required environment
+- 03-01: Patch mocks at import location (articles router) not definition location for background tasks
+- 03-01: Patch AsyncSessionLocal in integration_client to ensure background tasks use test database
+- 03-01: Use xfail warmup test to handle testcontainers async initialization timing
 
 ### Pending Todos
 
@@ -85,5 +85,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-05 (Phase 3 execution)
-Stopped at: Completed 03-02-PLAN.md (Bot unit tests)
+Stopped at: Completed 03-01-PLAN.md (Backend integration tests)
 Resume file: None
