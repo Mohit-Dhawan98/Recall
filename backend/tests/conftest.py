@@ -271,3 +271,47 @@ def sample_urls():
         "twitter": "https://twitter.com/user/status/12345",
         "youtube": "https://www.youtube.com/watch?v=abc123",
     }
+
+
+@pytest.fixture
+def sample_html_content():
+    """Sample HTML content for content extraction tests."""
+    return '<html><head><title>Test AI Article</title></head><body><article><h1>Test AI Article</h1><p>Artificial intelligence is transforming the technology industry. Companies like OpenAI are leading the way with large language models. This article explores the impact of AI on modern software development practices and the future of programming.</p></article></body></html>'
+
+
+@pytest.fixture(scope="function")
+async def integration_client(test_engine, default_user) -> AsyncGenerator[AsyncClient, None]:
+    """Create test client with real database and patched background task dependencies.
+
+    This fixture ensures that background tasks use the test database by patching
+    AsyncSessionLocal in app.routers.articles. It also mocks external services
+    (embeddings, graph building) that are not the focus of integration tests.
+    """
+    from unittest.mock import patch
+    from app.main import app
+    from app.database import get_db
+
+    # Create test session maker
+    test_session_maker = async_sessionmaker(
+        test_engine,
+        class_=AsyncSession,
+        expire_on_commit=False
+    )
+
+    async def override_get_db():
+        async with test_session_maker() as session:
+            yield session
+
+    # Override get_db for API requests
+    app.dependency_overrides[get_db] = override_get_db
+
+    # Mock external services that aren't part of the integration test scope
+    with patch('app.services.llm.generate_embedding', new=AsyncMock(return_value=None)), \
+         patch('app.services.graph.build_relations_for_article', new=AsyncMock(return_value=[])), \
+         patch('app.routers.articles.AsyncSessionLocal', new=test_session_maker):
+
+        transport = ASGITransport(app=app)
+        async with AsyncClient(transport=transport, base_url="http://test") as ac:
+            yield ac
+
+    app.dependency_overrides.clear()
