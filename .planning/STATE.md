@@ -5,21 +5,21 @@
 See: .planning/PROJECT.md (updated 2026-01-29)
 
 **Core value:** Effortlessly capture articles I read and resurface them when relevant.
-**Current focus:** Phase 2 - Extension Verification & Frontend Tests
+**Current focus:** Phase 3 - Backend & Bot Testing (Complete)
 
 ## Current Position
 
 Phase: 3 of 6 (Backend & Bot Testing)
-Plan: 1 of 2 in current phase
-Status: In progress — plan 03-01 complete
-Last activity: 2026-02-05 — Completed 03-01-PLAN.md (Backend integration tests)
+Plan: 2 of 2 in current phase
+Status: Complete — verified
+Last activity: 2026-02-05 — Completed and verified Phase 3
 
-Progress: [████████░░] 80%
+Progress: [████████░░] 83%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 8
+- Total plans completed: 9
 - Average duration: 3 min
 - Total execution time: 0.4 hours
 
@@ -29,10 +29,10 @@ Progress: [████████░░] 80%
 |-------|-------|-------|----------|
 | 1 | 3 | 6min | 2min |
 | 2 | 4 | 8min | 2min |
-| 3 | 1 | 9min | 9min |
+| 3 | 2 | 11min | 5.5min |
 
 **Recent Trend:**
-- Last 5 plans: 02-02 (2min), 02-03 (2min), 02-04 (2min), 03-01 (9min)
+- Last 5 plans: 02-03 (2min), 02-04 (2min), 03-01 (9min), 03-02 (2min)
 - Trend: Integration tests took longer due to testcontainers complexity
 
 *Updated after each plan completion*
@@ -64,6 +64,7 @@ Recent decisions affecting current work:
 - 03-01: Patch mocks at import location (articles router) not definition location for background tasks
 - 03-01: Patch AsyncSessionLocal in integration_client to ensure background tasks use test database
 - 03-01: Use xfail warmup test to handle testcontainers async initialization timing
+- 03-02: Add `bot/__init__.py` for proper Python package imports in tests
 
 ### Pending Todos
 
@@ -85,5 +86,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-05 (Phase 3 execution)
-Stopped at: Completed 03-01-PLAN.md (Backend integration tests)
+Stopped at: Phase 3 complete and verified. Next: Phase 4 (Auto-Capture Foundation).
 Resume file: None

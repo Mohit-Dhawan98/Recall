@@ -67,8 +67,8 @@ Plans:
 **Plans**: 2 plans
 
 Plans:
-- [ ] 03-01-PLAN.md — Backend integration tests for capture pipeline and failure scenarios
-- [ ] 03-02-PLAN.md — Bot unit tests for URL extraction, message handling, and authorization
+- [x] 03-01-PLAN.md — Backend integration tests for capture pipeline and failure scenarios
+- [x] 03-02-PLAN.md — Bot unit tests for URL extraction, message handling, and authorization
 
 ### Phase 4: Auto-Capture Foundation
 **Goal**: Users can manage domain whitelist in extension options and extension detects article pages using Readability heuristics
@@ -122,7 +122,7 @@ Phases execute in numeric order: 1 → 2 → 3 → 4 → 5 → 6
 |-------|----------------|--------|-----------|
 | 1. Critical Fixes & Test Infrastructure | 3/3 | ✓ Complete | 2026-01-29 |
 | 2. Extension Verification & Frontend Tests | 4/4 | ✓ Complete | 2026-01-30 |
-| 3. Backend & Bot Testing | 0/2 | Planning complete | - |
+| 3. Backend & Bot Testing | 2/2 | ✓ Complete | 2026-02-05 |
 | 4. Auto-Capture Foundation | 0/0 | Not started | - |
 | 5. Dwell Time Tracking | 0/0 | Not started | - |
 | 6. Auto-Capture Integration & Polish | 0/0 | Not started | - |
