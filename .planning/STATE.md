@@ -9,19 +9,19 @@ See: .planning/PROJECT.md (updated 2026-01-29)
 
 ## Current Position
 
-Phase: 2 of 6 (Extension Verification & Frontend Tests)
-Plan: 4 of 4 in current phase
-Status: Complete — awaiting verification
-Last activity: 2026-01-30 — Completed all Phase 2 plans
+Phase: 3 of 6 (Backend & Bot Testing)
+Plan: 2 of 2 in current phase
+Status: In progress — plan 03-02 complete
+Last activity: 2026-02-05 — Completed 03-02-PLAN.md (Bot unit tests)
 
-Progress: [███████░░░] 67%
+Progress: [████████░░] 78%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 7
+- Total plans completed: 8
 - Average duration: 2 min
-- Total execution time: 0.2 hours
+- Total execution time: 0.3 hours
 
 **By Phase:**
 
@@ -29,9 +29,10 @@ Progress: [███████░░░] 67%
 |-------|-------|-------|----------|
 | 1 | 3 | 6min | 2min |
 | 2 | 4 | 8min | 2min |
+| 3 | 1 | 2min | 2min |
 
 **Recent Trend:**
-- Last 5 plans: 01-03 (1min), 02-01 (2min), 02-02 (2min), 02-04 (2min), 02-03 (2min)
+- Last 5 plans: 02-01 (2min), 02-02 (2min), 02-03 (2min), 02-04 (2min), 03-02 (2min)
 - Trend: Consistent velocity (~2min/plan)
 
 *Updated after each plan completion*
@@ -60,6 +61,9 @@ Recent decisions affecting current work:
 - 02-02: Use getByRole for elements with duplicate text content (Search heading vs button)
 - 02-02: vi.mock react-force-graph-2d before import for canvas-dependent components
 - 02-04: Use querySelector for CSS class-based elements (spinner, card sections)
+- 03-02: Mock save_article function instead of httpx client directly for cleaner test boundaries
+- 03-02: Create bot/__init__.py to make bot directory a proper Python package
+- 03-02: Use autouse fixture for env vars to ensure all tests have required environment
 
 ### Pending Todos
 
@@ -80,6 +84,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-01-30 (Phase 2 execution)
-Stopped at: Phase 2 complete. Next: Verify phase, then Phase 3.
+Last session: 2026-02-05 (Phase 3 execution)
+Stopped at: Completed 03-02-PLAN.md (Bot unit tests)
 Resume file: None
