@@ -28,7 +28,7 @@ export default function Share() {
     // Get URL from share target params
     const url = searchParams.get('url');
     const text = searchParams.get('text');
-    const title = searchParams.get('title');
+    // title available via searchParams.get('title') if needed
 
     // Extract URL from various possible sources
     let targetUrl = url;
