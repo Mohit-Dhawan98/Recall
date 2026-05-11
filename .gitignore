@@ -6,7 +6,8 @@
 *~
 
 # AI assistant
-.claude/
+.claude/*
+!.claude/settings.local.json
 
 # Dependencies
 node_modules/
