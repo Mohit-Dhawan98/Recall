@@ -71,3 +71,6 @@ backend/.pytest_cache/
 
 # Extension build
 extension/*.zip
+# Local agent tooling and planning notes
+.claude/
+.planning/

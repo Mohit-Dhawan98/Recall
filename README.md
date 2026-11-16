@@ -17,8 +17,8 @@ Recall is a self-hosted knowledge management system that helps you save, organiz
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourname/recall
-cd recall
+git clone https://github.com/Mohit-Dhawan98/Recall
+cd Recall
 
 # Configure
 cp .env.example .env
@@ -29,6 +29,13 @@ docker-compose up -d
 
 # Open http://localhost:3000
 ```
+
+## How it thinks
+
+Recall is built on a few opinions: save only what you choose, store a summary
+rather than a copy, tag from a fixed vocabulary, and build the knowledge graph
+with rules instead of model calls. The reasoning, with pointers into the code,
+is in [docs/PRINCIPLES.md](docs/PRINCIPLES.md).
 
 ## Capture Methods
 
@@ -144,7 +151,7 @@ npm run dev
 
 ## License
 
-MIT
+MIT, see [LICENSE](LICENSE).
 
 ## Acknowledgments
 
